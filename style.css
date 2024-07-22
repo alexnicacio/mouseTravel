@@ -3,3 +3,21 @@
   font-size: larger;
   position: absolute;
 }
+
+#milestones {
+  position: relative;
+  top: 200px;
+  right: 10px;
+  background: white;
+  padding: 10px;
+  border: 1px solid black;
+  max-width: 500px;
+}
+
+#milestoneList li {
+  transition: color 0.5s ease;
+}
+
+.highlight {
+  color: green;
+}
