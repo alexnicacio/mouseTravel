@@ -3,45 +3,148 @@ let totalDistance = 0; // Variável global para armazenar a soma das distâncias
 // Relação de pixels para metros (por exemplo, 100 pixels = 0.0254 metros)
 const pixelsPerMeter = 100 / 0.0254;
 let moveWithMouse = false; // Flag para controlar o movimento do texto
+let showAllMilestones = false; // Flag para controlar a exibição de todos os marcos
 let milestoneIndex = 0; // Índice do próximo marco a ser alcançado
 
 const log = document.getElementById("log");
 const toggleButton = document.getElementById("toggleButton");
+const toggleMilestonesButton = document.getElementById("toggleMilestones");
 const milestoneList = document.getElementById("milestoneList");
 
 // Lista de marcos
 const milestones = [
+  { distance: 0.02, message: "You have traveled the length of a pen (2 cm)." },
   {
     distance: 0.055,
-    message: "You have traveled the height of a mouse (5.5 cm).",
+    message: "Your mouse have traveled the height of a mouse (5.5 cm).",
   },
   {
     distance: 0.1,
-    message: "You have traveled the height of a basketball hoop (10 cm).",
+    message:
+      "Your mouse have traveled the height of a basketball hoop (10 cm).",
+  },
+  {
+    distance: 0.15,
+    message: "Your mouse have traveled the length of a notebook (15 cm).",
   },
   {
     distance: 0.5,
-    message: "You have traveled the height of a refrigerator (50 cm).",
+    message: "Your mouse have traveled the height of a refrigerator (50 cm).",
   },
-  { distance: 1, message: "You have traveled the height of a doorway (1 m)." },
+  {
+    distance: 1,
+    message: "Your mouse have traveled the height of a doorway (1 m).",
+  },
+  {
+    distance: 1.5,
+    message: "Your mouse have traveled the length of a bed (1.5 m).",
+  },
+  {
+    distance: 4.2,
+    message: "Your mouse have traveled the length of a car (4.2 m).",
+  },
   {
     distance: 5.5,
-    message: "You have traveled the height of a giraffe (5.5 m).",
+    message: "Your mouse have traveled the height of a giraffe (5.5 m).",
   },
   {
     distance: 10,
-    message: "You have traveled the height of a telephone pole (10 m).",
+    message: "Your mouse have traveled the height of a telephone pole (10 m).",
+  },
+  {
+    distance: 10,
+    message: "Your mouse have traveled the length of a bus (10 m).",
   },
   {
     distance: 20,
-    message: "You have traveled the height of a five-story building (20 m).",
+    message:
+      "Your mouse have traveled the height of a five-story building (20 m).",
   },
-  { distance: 50, message: "You have traveled the height of a rocket (50 m)." },
+  {
+    distance: 25,
+    message: "Your mouse have traveled the length of a train car (25 m).",
+  },
+  {
+    distance: 50,
+    message: "Your mouse have traveled the height of a rocket (50 m).",
+  },
   {
     distance: 100,
-    message: "You have traveled the height of the Eiffel Tower (100 m).",
+    message: "Your mouse have traveled the height of the Eiffel Tower (100 m).",
+  },
+  {
+    distance: 110,
+    message: "Your mouse have traveled the length of a football field (110 m).",
+  },
+  {
+    distance: 195,
+    message: "Your mouse have traveled the length of the Titanic (195 m).",
+  },
+  {
+    distance: 200,
+    message:
+      "Your mouse have traveled the height of the Washington Monument (200 m).",
+  },
+  {
+    distance: 300,
+    message:
+      "Your mouse have traveled the height of the Statue of Liberty (300 m).",
+  },
+  {
+    distance: 400,
+    message:
+      "Your mouse have traveled the height of the Empire State Building (400 m).",
+  },
+  {
+    distance: 500,
+    message: "Your mouse have traveled the height of the Burj Khalifa (500 m).",
+  },
+  { distance: 1000, message: "Your mouse have traveled 1 kilometer (1000 m)." },
+  {
+    distance: 2000,
+    message: "Your mouse have traveled 2 kilometers (2000 m).",
+  },
+  {
+    distance: 2750,
+    message:
+      "Your mouse have traveled the length of the Golden Gate Bridge (2.75 km).",
+  },
+  {
+    distance: 4000,
+    message:
+      "Your mouse have traveled the length of the Great Wall of China section (4 km).",
+  },
+  {
+    distance: 5000,
+    message: "Your mouse have traveled 5 kilometers (5000 m).",
+  },
+  {
+    distance: 10000,
+    message: "Your mouse have traveled 10 kilometers (10000 m).",
   },
 ];
+
+// Inicializa a lista de marcos
+function initializeMilestoneList() {
+  milestoneList.innerHTML = "";
+  milestones.forEach((milestone, index) => {
+    const milestoneItem = document.createElement("li");
+    milestoneItem.textContent = milestone.message;
+    milestoneItem.dataset.index = index;
+    milestoneList.appendChild(milestoneItem);
+  });
+}
+
+// Atualiza a visibilidade da lista de marcos
+function updateMilestoneVisibility() {
+  const milestoneItems = milestoneList.getElementsByTagName("li");
+  for (const item of milestoneItems) {
+    item.style.opacity = showAllMilestones ? "1" : "0";
+  }
+}
+
+// Inicializa a lista de marcos
+initializeMilestoneList();
 
 function logMovement(event) {
   let distanceInPixels = Math.sqrt(
@@ -59,7 +162,7 @@ function logMovement(event) {
 
   // Atualiza o conteúdo do elemento log
   log.innerHTML = `
-    Total Mouse Movement Distance:
+    Total Distance:
     <br> ${totalDistanceInCm} cm
     <br> ${formattedDistance} m
     <br> ${totalDistanceInKm} km
@@ -70,18 +173,20 @@ function logMovement(event) {
     milestoneIndex < milestones.length &&
     totalDistance >= milestones[milestoneIndex].distance
   ) {
-    // Adiciona o marco atingido à lista de marcos
-    const milestoneItem = document.createElement("li");
-    milestoneItem.textContent = milestones[milestoneIndex].message;
-    milestoneList.appendChild(milestoneItem);
+    // Encontra o item correspondente na lista de marcos
+    const milestoneItem = milestoneList.querySelector(
+      `[data-index="${milestoneIndex}"]`
+    );
+    if (milestoneItem) {
+      // Aplica a classe highlight para o fade in
+      milestoneItem.classList.add("highlight");
 
-    // Destaca o marco
-    milestoneItem.classList.add("highlight");
-
-    // Remove a classe de destaque após 5 segundos
-    setTimeout(() => {
-      milestoneItem.classList.remove("highlight");
-    }, 5000);
+      // Remove a classe highlight e adiciona fade-out após 5 segundos
+      setTimeout(() => {
+        milestoneItem.classList.remove("highlight");
+        milestoneItem.classList.add("reached");
+      }, 5000);
+    }
 
     milestoneIndex++;
   }
@@ -103,6 +208,15 @@ toggleButton.addEventListener("click", () => {
   toggleButton.innerText = moveWithMouse
     ? "Disable Movement"
     : "Enable Movement";
+});
+
+// Função para alternar a exibição de todos os marcos
+toggleMilestonesButton.addEventListener("click", () => {
+  showAllMilestones = !showAllMilestones;
+  toggleMilestonesButton.innerText = showAllMilestones
+    ? "Hide Milestones"
+    : "Show Milestones";
+  updateMilestoneVisibility();
 });
 
 document.addEventListener("mousemove", logMovement);

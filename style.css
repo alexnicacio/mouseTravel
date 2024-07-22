@@ -11,7 +11,8 @@
   background: white;
   padding: 10px;
   /* border: 1px solid black; */
-  max-width: 500px;
+  max-width: 600px;
+  font-size: larger;
 }
 
 #milestoneList li {
@@ -20,4 +21,11 @@
 
 .highlight {
   color: green;
+  opacity: 1; /* Totalmente visível quando destacado */
+}
+.fade-out {
+  opacity: 0; /* Invisível durante o fade out */
+}
+.reached {
+  text-decoration: line-through; /* Riscar o texto */
 }
