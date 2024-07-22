@@ -59,7 +59,7 @@ function logMovement(event) {
 
   // Atualiza o conteúdo do elemento log
   log.innerHTML = `
-    Total Distance:
+    Total Mouse Movement Distance:
     <br> ${totalDistanceInCm} cm
     <br> ${formattedDistance} m
     <br> ${totalDistanceInKm} km
