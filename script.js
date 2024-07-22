@@ -44,8 +44,8 @@ function logMovement(event) {
 toggleButton.addEventListener("click", () => {
   moveWithMouse = !moveWithMouse;
   toggleButton.innerText = moveWithMouse
-    ? "Disable Movement"
-    : "Enable Movement";
+    ? "Disable Text Movement"
+    : "Enable Text Movement";
 });
 
 document.addEventListener("mousemove", logMovement);
